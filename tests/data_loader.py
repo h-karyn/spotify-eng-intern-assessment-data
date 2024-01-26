@@ -28,8 +28,12 @@ def load_csv_to_mysql(filename, table_name, cursor):
                 # Execute the INSERT statement for each row
                 cursor.execute(insert_stmt, row)
             except Error as e:
-                print(f"Error: {e}")
-                break  # If an error occurs, break out of the loop
+                if e.errno == 1452:
+                    print(f"Skipping row due to foreign key constraint failure: {row}")
+                    continue
+                else:
+                    print(f"Error: {e}")
+                    break  # Break out of the loop for other errors
 
 # Database connection parameters
 db_config = {
