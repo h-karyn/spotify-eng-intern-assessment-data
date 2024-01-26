@@ -1,16 +1,16 @@
 import unittest
-import psycopg2  # Replace with appropriate database connector based on your database
-
+# import psycopg2  # Replace with appropriate database connector based on your database
+import mysql.connector
 class TestSQLQueries(unittest.TestCase):
 
     def setUp(self):
         # Establish a connection to your test database
-        self.conn = psycopg2.connect(
-            dbname='your_dbname',
-            user='your_username',
-            password='your_password',
-            host='your_host',
-            port='your_port'
+        self.conn = mysql.connector.connect(
+            database='spotify',
+            user='root',
+            password='qazwsxHMH',
+            host='127.0.0.1',
+            port='3306'
         )
         self.cur = self.conn.cursor()
 
@@ -21,22 +21,24 @@ class TestSQLQueries(unittest.TestCase):
 
     def test_task1(self):
         # Task 1: Example SQL query in task1.sql
-        with open('/sql/task1.sql', 'r') as file:
+        with open('../sql/task1.sql', 'r') as file:
             sql_query = file.read()
 
         self.cur.execute(sql_query)
         result = self.cur.fetchall()
 
+        print(result)
         # Define expected outcome for Task 1 and compare
         expected_result = [
             # Define expected rows or values here based on the query output
+
         ]
 
         self.assertEqual(result, expected_result, "Task 1: Query output doesn't match expected result.")
 
     def test_task2(self):
         # Task 2: Example SQL query in task2.sql
-        with open('/sql/task2.sql', 'r') as file:
+        with open('../sql/task2.sql', 'r') as file:
             sql_query = file.read()
 
         self.cur.execute(sql_query)

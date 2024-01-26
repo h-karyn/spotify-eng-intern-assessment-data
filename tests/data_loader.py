@@ -2,7 +2,6 @@ import csv
 import mysql.connector
 from mysql.connector import Error
 
-
 # Function to load a CSV file into a MySQL table
 def load_csv_to_mysql(filename, table_name, cursor):
     # Define the path to the CSV file
@@ -13,16 +12,17 @@ def load_csv_to_mysql(filename, table_name, cursor):
         # Create a CSV reader object using the csv module
         csv_reader = csv.reader(csv_file)
 
-        # Skip the header row
-        next(csv_reader, None)
+        # Get the header row
+        header_row = next(csv_reader)
 
         # Loop through the rows in the CSV reader object
         for row in csv_reader:
             # Create a string of placeholders for the INSERT query
             placeholders = ', '.join(['%s'] * len(row))
 
-            # Define the INSERT statement
-            insert_stmt = f"INSERT INTO {table_name} VALUES ({placeholders})"
+            # Define the INSERT statement with ON DUPLICATE KEY UPDATE
+            update_clause = ', '.join([f"{col} = VALUES({col})" for col in header_row])
+            insert_stmt = f"INSERT INTO {table_name} ({', '.join(header_row)}) VALUES ({placeholders}) ON DUPLICATE KEY UPDATE {update_clause}"
 
             try:
                 # Execute the INSERT statement for each row
@@ -30,7 +30,6 @@ def load_csv_to_mysql(filename, table_name, cursor):
             except Error as e:
                 print(f"Error: {e}")
                 break  # If an error occurs, break out of the loop
-
 
 # Database connection parameters
 db_config = {
