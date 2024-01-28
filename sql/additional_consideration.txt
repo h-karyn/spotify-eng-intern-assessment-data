@@ -1,0 +1,12 @@
+The queries and tests were constructed based on the requirements in the sql files. All the data from the csv files are loaded
+into the database by a call from test_sql_queries.py.
+
+However, three tables, namely, Reviews, Order_items and Cart_items are not fully loaded, due to the foreign key constraints.
+Data entries in those three tables are dependent on the data in other tables. For example, the Order_items table has a foreign
+key constraint on the product_id column, which is a primary key in the Products table. Although product_id of 17 exists in order_items_data.csv,
+product_id of 17 does not exist in the Products table. Therefore, the data entry for product_id of 17 in order_items_data.csv cannot be loaded.
+
+This could be a common challenge in the real world when digitalizing and creating a database for a business: the historical
+data may not be complete or accurate. In such cases, the data engineer needs to work with the business to decide how to handle
+the missing data. For example, the data engineer could decide to drop the data entries with missing foreign keys, or to drop the
+foreign key constraints in the database to ensure data integrity.
