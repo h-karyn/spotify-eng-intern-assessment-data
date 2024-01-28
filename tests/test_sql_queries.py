@@ -139,7 +139,7 @@ class TestSQLQueries(unittest.TestCase):
 
         expected_result_8 = []
 
-        # Define expected outcome for Task 2 and compare
+        # Define the expected outcomes for Task 2 and compare
         expected_results = [
             expected_result_5,
             expected_result_6,
