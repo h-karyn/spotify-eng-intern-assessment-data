@@ -1,4 +1,6 @@
 import unittest
+from _pydecimal import Decimal
+
 # import psycopg2  # Replace with appropriate database connector based on your database
 import mysql.connector
 
@@ -39,14 +41,12 @@ class TestSQLQueries(unittest.TestCase):
         # Remove any empty queries after splitting
         sql_queries = [query.strip() for query in sql_queries if query.strip()]
 
-        print(sql_queries)
-
         expected_result_1 = [(15, 'Mountain Bike',
-                             'Conquer the trails with this high-performance mountain bike.',
-                             1000.00),
-                            (16, 'Tennis Racket',
-                             'Take your tennis game to the next level with this professional-grade racket.',
-                             54.00)]
+                              'Conquer the trails with this high-performance mountain bike.',
+                              1000.00),
+                             (16, 'Tennis Racket',
+                              'Take your tennis game to the next level with this professional-grade racket.',
+                              54.00)]
         expected_result_2 = [
             (1, 'johndoe', 1),
             (2, 'janesmith', 1),
@@ -122,20 +122,40 @@ class TestSQLQueries(unittest.TestCase):
                                  f"Query {i + 1} in task1.sql output doesn't match expected result.")
 
     def test_task2(self):
-        # Task 2: Example SQL query in task2.sql
         with open('../sql/task2.sql', 'r') as file:
-            sql_query = file.read()
+            sql_queries = file.read().split(
+                ';')  # Assuming queries are separated by ';'
 
-        self.cur.execute(sql_query)
-        result = self.cur.fetchall()
+        # Remove any empty queries after splitting
+        sql_queries = [query.strip() for query in sql_queries if query.strip()]
+
+        expected_result_5 = [(1, 'Smartphone X', 5.0000),
+                             (4, 'Smart TV', 5.0000),
+                             (7, 'Coffee Maker', 5.0000),
+                             (11, 'Yoga Mat', 5.0000),
+                             (15, 'Mountain Bike', 5.0000)]
+
+        expected_result_6 = []
+
+        expected_result_7 = []
+
+        expected_result_8 = []
 
         # Define expected outcome for Task 2 and compare
-        expected_result = [
-            # Define expected rows or values here based on the query output
+        expected_results = [
+            expected_result_5,
+            expected_result_6,
+            expected_result_7,
+            expected_result_8
         ]
 
-        self.assertEqual(result, expected_result,
-                         "Task 2: Query output doesn't match expected result.")
+        # Execute each query and compare the result with the expected outcome
+        for i, query in enumerate(sql_queries):
+            with self.subTest(query=i):
+                self.cur.execute(query)
+                result = self.cur.fetchall()
+                self.assertEqual(result, expected_results[i],
+                                 f"Query {i + 5} in task1.sql output doesn't match expected result.")
 
     # Add more test methods for additional SQL tasks
 
